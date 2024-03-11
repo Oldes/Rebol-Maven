@@ -11,10 +11,8 @@ print as-blue "Collected dependencies:"
 
 total: 0
 foreach [id pom] dependencies [
-	type:  any [pom/packaging "jar"]
-	file:  rejoin [id #"/" pom/version #"/" pom/artifactId #"-" pom/version #"." type]
-	local: maven/cache-dir/:file
-	bytes: size? local
+	local: pom/local-file
+	bytes: size? maven/cache-dir/:local
 	print [as-green id as-blue pom/version "bytes:" as-red bytes]
 	total: total + bytes
 ]

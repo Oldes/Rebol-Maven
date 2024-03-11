@@ -199,8 +199,8 @@ get-dependencies: function/extern [
 			request-artifact take que
 		]
 		foreach [id pom] resources [
-			unless pom/dependencies [continue]
-			foreach [k dep] pom/dependencies [
+			if pom/local-file [continue] ;; ignore already processed artifact
+			foreach [k dep] any [pom/dependencies []] [
 				if k <> 'dependency [continue]
 				;?? dep
 				if find ["compile" "runtime"] dep/scope [
@@ -235,7 +235,10 @@ get-dependencies: function/extern [
 					repend/only que [dep/groupId dep/artifactId version]
 				]
 			]
-			pom/dependencies: none ;; not needed anymore
+			;; keep constructed local path to file
+			pom/local-file: rejoin [
+				id #"/" pom/version #"/" pom/artifactId #"-" pom/version #"." any [pom/packaging "jar"]
+			]
 		]
 	]
 	;foreach [id pom] resources [ print [id pom/version] ]
@@ -245,8 +248,7 @@ get-dependencies: function/extern [
 	print [as-blue "Downloading resources to cache direcory:" as-yellow cache-dir]
 
 	foreach [id pom] resources [
-		type: any [pom/packaging "jar"]
-		file:  rejoin [id #"/" pom/version #"/" pom/artifactId #"-" pom/version #"." type]
+		file:  pom/local-file
 		local: cache-dir/:file
 		unless exists? local [
 			unless bin: download-artifact file [
