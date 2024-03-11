@@ -1,3 +1,4 @@
+[![Rebol-Maven CI](https://github.com/Oldes/Rebol-Maven/actions/workflows/main.yml/badge.svg)](https://github.com/Oldes/Rebol-Maven/actions/workflows/main.yml)
 # Rebol/Maven
 Rebol script resolving (and downloading) Java dependencies from Maven repositories
 
