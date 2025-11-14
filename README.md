@@ -1,4 +1,8 @@
+[![rebol-maven](https://github.com/user-attachments/assets/ecf5b783-059a-4ca2-8fa7-887db5d71a3e)](https://github.com/Oldes/Rebol-Maven)
+
 [![Rebol-Maven CI](https://github.com/Oldes/Rebol-Maven/actions/workflows/main.yml/badge.svg)](https://github.com/Oldes/Rebol-Maven/actions/workflows/main.yml)
+[![Gitter](https://badges.gitter.im/rebol3/community.svg)](https://app.gitter.im/#/room/#Rebol3:gitter.im)
+[![Zulip](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://rebol.zulipchat.com/)
 # Rebol/Maven
 Rebol script resolving (and downloading) Java dependencies from Maven repositories
 
