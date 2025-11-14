@@ -2,17 +2,17 @@ Rebol [
 	Title: "Maven"
 	Name:   maven
 	Type:   module
-	Date:   11-Mar-2024 
-	Version: 1.0.0
+	Date:   12-Nov-2025
+	Version: 1.1.0
 	Author:  @Oldes
 	Purpose: {To resolve Java dependencies from Maven repositories.}
 	Needs: [xml]
 	Usage: [
 		get-dependencies [
 			"androidx.activity:activity:1.8.2"
-			"com.google.android.play:asset-delivery:2.2.1"
-			"com.google.android.gms:play-services-games:23.1.0"
-			"com.google.android.gms:play-services-auth:21.0.0"
+			"com.google.android.play:asset-delivery:2.3.0"
+			"com.google.android.gms:play-services-games:24.0.0"
+			"com.google.android.gms:play-services-auth:21.4.0"
 		]
 	]
 	Note: {
@@ -48,11 +48,11 @@ xml-to-blk: function[xml][
 	new-line/skip map true 2
 	map
 ]
-decode-pom: function [pom [binary! file! url!]][
-	unless binary? pom [pom: read pom]
+decode-pom: function [pom [binary! string! file! url!]][
+	if any [file? pom url? pom] [pom: read pom]
 	;; decodes POM file as XML (ignoring formating)
 	xml: codecs/xml/decode/trim pom
-	if "project" <> xml/3/1/1 [return none]
+	if any [none? xml/3 "project" <> xml/3/1/1] [return none]
 	;; convert result to a simplified representation
 	to map! xml-to-blk xml/3/1/3
 ]
@@ -62,7 +62,7 @@ load-pom: function[pom-file][
 		;; try to download the POM file from any of known repositories
 		foreach url repositories [
 			if binary? try [
-				bin: read/binary url/:pom-file
+				bin: read url/:pom-file
 			][	break ]
 		]
 		unless bin [
@@ -253,7 +253,8 @@ get-dependencies: function/extern [
 		unless exists? local [
 			unless bin: download-artifact file [
 				print [as-purple "*** Artifact file not found:" as-red file]
-				cause-error 'access 'read-error reduce [file 'download-artifact]
+				continue
+				;cause-error 'access 'read-error reduce [file 'download-artifact]
 			]
 			try/with [
 				write local bin
